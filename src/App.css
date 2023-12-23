@@ -1,23 +1,31 @@
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #f4f4f4;
+  background: linear-gradient(to right, black,  #2d0351 ,  #44067c ,  #640ab3 , #7a0eda );
   margin: 0;
   padding: 0;
 }
 
+
+
 .container {
   max-width: 800px;
   margin: 20px auto;
-  background-color: #fff;
+  background-color: white; /* White with 90% opacity */
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position:relative;
 }
 
 h1 {
-  color: #333;
-  text-align:center;
+  color: #8a2be2; /* Purple color */
+  text-align: center;
+  font-family: 'Pacifico', cursive;
+  font-size: 36px; /* Adjust the font size as needed */
+  margin-bottom: 20px; /* Optional: Add some margin for spacing */
 }
+
+
 
 label {
   display: block;
@@ -26,22 +34,40 @@ label {
 
 table {
   width: 100%;
-  border-collapse: collapse; /* added for better styling */
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: rgba(255, 255, 255, 0.9); /* White with 90% opacity */
+
 }
 
 td {
-  padding: 10px;
-  border: 1px solid #ddd; /* added border properties */
-  transition: background-color 0.3s, text-decoration 0.3s, color 0.3s; /* added transition effect for text-decoration and color */
-  text-align: center; /* center the content within the td */
+  padding: 12px;
+  transition: background-color 0.3s, text-decoration 0.3s, color 0.3s;
+  text-align: left;
+
 }
 
 input {
-  width: calc(100% - 20px);
-  padding: 8px;
+  width: 100%;
+  padding: 10px;
   margin-bottom: 10px;
+  box-sizing: border-box;
+}
+.logo {
+  width: 130px; /* Adjust the width as needed */
+  height: 50px;
+  left:30px;
+  position:relative;
+  top:15px;
+  
+  /* Adjust the height as needed */
 }
 
+
+
+/* Updated button styles */
+/* Updated button styles with background color animation */
+/* Updated button styles with animation */
 button {
   background-color: #4caf50;
   color: #fff;
@@ -50,14 +76,31 @@ button {
   margin: 5px;
   cursor: pointer;
   border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s; /* Added transition properties */
+  float: right;
+  margin-top: 0px;
+}
+tr {
+  background-color: rgba(255, 0, 0, 0.3); /* Red with 30% opacity */
 }
 
 button:hover {
   background-color: #45a049;
+  color: #eaeaea;
+  transform: scale(1.05); /* Added scale transformation on hover */
 }
 
+
+
+
 .completed {
-  background-color: #dff0d8; /* background color for completed tasks */
-  text-decoration: line-through; /* line-through effect for completed tasks */
-  color: red; /* color for completed tasks */
+  background-color: #e0e0e0; /* Change this to the desired background color for completed tasks */
+  color: #666; /* Change this to the desired font color for completed tasks */
+  text-decoration:line-through;
+
+}
+
+tr.completed td {
+  background-color:  #8aea82 ; /* Change this to the desired background color for completed tasks */
+  color: #666; /* Change this to the desired font color for completed tasks */
 }

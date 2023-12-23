@@ -1,11 +1,16 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faPen, faCheck } from '@fortawesome/free-solid-svg-icons';
 import React, { useState, useEffect } from 'react';
-import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
+import logo from './assets/webeasy.png';
 
 const TaskManager = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [editTaskText, setEditTaskText] = useState('');
+  const [showInput, setShowInput] = useState(false);
 
   useEffect(() => {
     fetchTasks();
@@ -22,7 +27,6 @@ const TaskManager = () => {
   };
 
   const addTask = async () => {
-    // Check if the newTask input is empty
     if (!newTask.trim()) {
       alert('Please enter a task before adding.');
       return;
@@ -39,6 +43,7 @@ const TaskManager = () => {
       const newTaskData = await response.json();
       setTasks([...tasks, newTaskData]);
       setNewTask('');
+      setShowInput(false);
     } catch (error) {
       console.error('Error adding task:', error);
     }
@@ -49,7 +54,6 @@ const TaskManager = () => {
       await fetch(`http://localhost:5000/tasks/${taskId}`, {
         method: 'DELETE',
       });
-      // Remove the deleted task from the tasks array
       setTasks(tasks.filter((task) => task._id !== taskId));
     } catch (error) {
       console.error('Error deleting task:', error);
@@ -70,11 +74,9 @@ const TaskManager = () => {
         },
         body: JSON.stringify({ title: editTaskText }),
       });
-      // Update the tasks array with the edited task
       setTasks(tasks.map((task) =>
         task._id === editingTaskId ? { ...task, title: editTaskText } : task
       ));
-      // Reset the editing state
       setEditingTaskId(null);
       setEditTaskText('');
     } catch (error) {
@@ -91,7 +93,6 @@ const TaskManager = () => {
         },
         body: JSON.stringify({ completed: !currentCompletionStatus }),
       });
-      // Update the tasks array with the toggled completion status
       setTasks(tasks.map((task) =>
         task._id === taskId ? { ...task, completed: !currentCompletionStatus } : task
       ));
@@ -101,57 +102,70 @@ const TaskManager = () => {
   };
 
   return (
-    <div>
-      <h1>Task Manager</h1>
+    
+    <div className="container mt-5">
+      <h1 className="text-center">To do List</h1>
 
-      <label htmlFor="taskInput">Task:</label>
-      <input
-        type="text"
-        id="taskInput"
-        placeholder="Enter a task"
-        value={newTask}
-        onChange={(e) => setNewTask(e.target.value)}
-      />
-      <button onClick={addTask}>Add Task</button>
+      <div className="mb-3">
+        {showInput ? (
+          <div className="input-group">
+            <input
+              type="text"
+              className="form-control"
+              id="taskInput"
+              placeholder="Enter a task"
+              value={newTask}
+              onChange={(e) => setNewTask(e.target.value)}
+            />
+            <div className="input-group-append">
+              <button className="btn btn-success" onClick={addTask}>
+                Add Task
+              </button>
+            </div>
+          </div>
+        ) : (
+          <button className="btn btn-success" onClick={() => setShowInput(true)}>
+            Add Task
+          </button>
+        )}
+      </div>
 
-      <h2>Task List</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Task</th>
-            <th>Edit</th>
-            <th>Delete</th>
-            <th>Toggle Completion</th>
-          </tr>
-        </thead>
+      <table className="table">
+        <thead></thead>
         <tbody>
           {tasks.map((task) => (
             <tr key={task._id} className={task.completed ? 'completed' : ''}>
               <td>
-                {editingTaskId === task._id ? (
-                  <>
-                    <input
-                      type="text"
-                      value={editTaskText}
-                      onChange={(e) => setEditTaskText(e.target.value)}
-                    />
-                    <button onClick={updateTask}>Update</button>
-                  </>
-                ) : (
-                  <>
-                    {task.title}
-                  </>
-                )}
-              </td>
+  {editingTaskId === task._id ? (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <input
+        type="text"
+        value={editTaskText}
+        onChange={(e) => setEditTaskText(e.target.value)}
+        style={{ marginRight: '5px' }}
+      />
+      <button className="btn btn-primary" onClick={updateTask}>
+        <FontAwesomeIcon icon={faCheck} />
+      </button>
+    </div>
+  ) : (
+    <>
+      {task.title}
+    </>
+  )}
+</td>
+
               <td>
-                <button onClick={() => startEditTask(task._id, task.title)}>Edit</button>
-              </td>
-              <td>
-                <button onClick={() => deleteTask(task._id)}>Delete</button>
-              </td>
-              <td>
-                <button onClick={() => toggleCompletion(task._id, task.completed)}>
-                  {task.completed ? 'Mark Incomplete' : 'Mark Complete'}
+                <button className="btn btn-warning" onClick={() => startEditTask(task._id, task.title)}>
+                  <FontAwesomeIcon icon={faPen} />
+                </button>
+
+                <button className="btn btn-danger" onClick={() => deleteTask(task._id)}>
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+
+                <button className="btn btn-info" onClick={() => toggleCompletion(task._id, task.completed)}>
+                  <FontAwesomeIcon icon={faCheck} /> {task.completed ? 'Mark Incomplete' : 'Mark Complete'}
                 </button>
               </td>
             </tr>
@@ -161,5 +175,10 @@ const TaskManager = () => {
     </div>
   );
 };
-
-export default TaskManager;
+const App = () => (
+  <div>
+    <img src={logo} alt="Logo" className="logo" />
+    <TaskManager />
+  </div>
+);
+export default App;
